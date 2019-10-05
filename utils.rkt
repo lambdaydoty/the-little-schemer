@@ -15,3 +15,8 @@
     (newline)
     ))
 
+(define (map fn l)
+  (cond [(null? l) '()]
+        [else (cons (fn (car l))
+                    (map fn (cdr l)))]))
+
