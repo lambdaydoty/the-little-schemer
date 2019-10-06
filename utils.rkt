@@ -20,3 +20,8 @@
         [else (cons (fn (car l))
                     (map fn (cdr l)))]))
 
+(define (filter p l)
+  (cond [(null? l) '()]
+        [else (if (p (car l))
+                  (cons (car l) (filter p (cdr l)))
+                  (filter p (cdr l)))]))
