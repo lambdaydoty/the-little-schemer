@@ -1,16 +1,29 @@
 #lang racket
 (require "utils.rkt")
+(provide (all-defined-out))
+
 ;;
-;; keywords:
+;; Note:
+;;   A Style between:
+;;
+;;   A)
+;;     (define (rember a lat)
+;;        (cond [(null? lat) ...]
+;;              [else (cond ...)]))
+;;
+;;   B)
+;;     (define (rember a lat)
+;;        (cond [(null? lat) ...]
+;;              [(eq ...)]
+;;              [else ...]))
+;;
+;;   The benefit of A) is that `the function's structure
+;;   coincide with its arguemnt's structure`!
+;;
+;;      lat ::= null
+;;          |   (a . lat)
 ;;
 
-(define (lat? l)
-  (cond [(null? l) #t]
-        [else (and (atom? (car l))
-                   (lat? (cdr l)))])
-  )
-
-;;   member? :: Atom -> LAT -> Boolean
 ;;   rember  :: Atom -> LAT -> LAT  # remove the first occurrence of the atom
 ;;   insertR :: Atom -> Atom -> LAT -> LAT
 ;;   insertL :: Atom -> Atom -> LAT -> LAT
@@ -19,11 +32,6 @@
 ;;
 ;;   firsts   :: List -> List
 ;;   seconds  :: List -> List
-
-(define (member? a lat)
-  (cond [(null? lat) #f]
-        [(eq? (car lat) a) #t]
-        [else (member? a (cdr lat))]))
 
 (define (rember a lat)
   (cond [(null? lat) '()]
@@ -90,65 +98,3 @@
         [(eq? (car lat) old) (cons new
                                    (multisubst new old (cdr lat)))]
         [else (cons (car lat) (multisubst new old (cdr lat)))]))
-
-#| REMOVE A MEMBER |#
-(listing
-  (rember 'mint '(lamb chops and mint jelly))
-  (rember 'mint '(lamb chops and mint flavored mint jelly))
-  (rember 'toast '(bacon lettuce and tomato))
-  (rember 'cup '(coffee cup tea cup and hick cup))
-  (rember 'sauce '(soy sauce and tomato sauce))
-  )
-
-#| FIRSTS |#
-(listing
-  (firsts '((apple peach pumpkin)
-            (plum pear cherry)
-            (grape rasin pea)
-            (bean carrot eggplant)))
-  (firsts '((a b)
-            (c d)
-            (d f)))
-  (firsts '())
-  (firsts '((five plums)
-            (four)
-            (eleven green oragnes)))
-  (firsts '(((five plums) four)
-            (eleven green oragnes)
-            ((no) more)))
-  )
-
-#| SECONDS |#
-(listing
-  (seconds '((a b)
-             (c d)
-             (e f)))
-  )
-
-#| INSERT-R |#
-(listing
-  (insertR 'topping 'fudge '(ice cream with fudge for dessert))
-  (insertR 'jalapeno 'and '(tacos tamales and salsa))
-  (insertR 'e 'd '(a b c d e f g d h))
-  (insertL 'e 'd '(a b c d e f g d h))
-  )
-
-#| SUBST |#
-(listing
-  (subst 'topping 'fudge '(ice cream with fudge for dessert))
-  )
-
-#| SUBST2 |#
-(listing
-  (subst2 'vanilla 'chocolate 'banana '(banana ice cream with chocolate topping))
-  )
-
-#| MULTIREMBER |#
-(listing
-  (multirember 'cup '(coffee cup tea cup and hick cup))
-  )
-
-#| MULTIINSERTL |#
-(listing
-  (multiinsertL 'fried 'fish '(chips and fish or fish and fried))
-  )
