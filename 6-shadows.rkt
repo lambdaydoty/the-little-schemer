@@ -19,14 +19,14 @@
                      (numbered? right)))]))
 
 ;; value :: Numbered-arithmetic-exp -> N
+(define 1st-sub-exp car)
+(define 2nd-sub-exp caddr)
+(define operator cadr)
 (define (value nexp)
-  (define 1-sub-exp car)
-  (define 2-sub-exp caddr)
-  (define operator cadr)
   (cond [(atom? nexp) nexp]
-        [else (let ([left (1-sub-exp nexp)]
+        [else (let ([left (1st-sub-exp nexp)]
                     [op (operator nexp)]
-                    [right (2-sub-exp nexp)])
+                    [right (2nd-sub-exp nexp)])
                 (cond [(eq? op '+) (+ (value left)
                                       (value right))]
                       [(eq? op '×) (* (value left)
