@@ -91,12 +91,12 @@
 (define (fun? rel) (set? (firsts rel)))
 
 ;; revrel :: Relation -> Relation
+(define (reverse-pair pair)
+  (build (second pair)
+         (first pair)))
 (define (revrel rel)
-  (define (reverse pair)
-    (build (second pair)
-           (first pair)))
   (cond [(null? rel) '()]
-        [else (cons (reverse (car rel))
+        [else (cons (reverse-pair (car rel))
                     (revrel (cdr rel)))]))
 
 ;; fullfun? :: Function -> Boolean
